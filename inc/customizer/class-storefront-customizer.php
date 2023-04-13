@@ -193,6 +193,33 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			);
 
 			/**
+			 * Heading top message
+			 */
+			$wp_customize->add_setting(
+				'storefront_top_header_message',
+				array(
+					/**
+					 * Filters for modifying the default heading color.
+					 *
+					 * @param string Hex color value.
+					 * @package  storefront
+					 * @since    2.0.0
+					 */
+					'default'           => '',
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+
+			$wp_customize->add_control(
+				'storefront_top_header_message',
+				array(
+					'label'    => __( 'Top Header Message', 'storefront' ),
+					'section'  => 'title_tagline',
+					'settings' => 'storefront_top_header_message',
+				)
+			);
+
+			/**
 			 * Heading color
 			 */
 			$wp_customize->add_setting(

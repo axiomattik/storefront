@@ -15,10 +15,18 @@ add_action( 'storefront_before_content', 'storefront_header_widget_region', 10 )
 add_action( 'storefront_sidebar', 'storefront_get_sidebar', 10 );
 
 /**
+ * Before Header
+ *
+ *@see storefront_top_header()
+ */
+add_action( 'storefront_before_header', 'storefront_top_header', -1 );
+
+/**
  * Header
  *
  * @see  storefront_skip_links()
  * @see  storefront_secondary_navigation()
+ * @see  storefront_top_header()
  * @see  storefront_site_branding()
  * @see  storefront_primary_navigation()
  */

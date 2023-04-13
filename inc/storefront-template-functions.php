@@ -183,6 +183,26 @@ if ( ! function_exists( 'storefront_header_widget_region' ) ) {
 	}
 }
 
+if ( ! function_exists( 'storefront_top_header' ) ) {
+	/**
+	 * Optional message at top of site
+	 *
+	 * @since 4.3.0
+	 * @return none
+	 */
+	function storefront_top_header() {
+		$message = get_theme_mod( 'storefront_top_header_message', '' );
+		if ( empty( $message ) ) {
+			return;
+		}
+		?>
+		<div class="site-top-header">
+			<p><?php echo esc_html( $message ); ?></p>
+		</div>
+		<?php
+	}
+}
+
 if ( ! function_exists( 'storefront_site_branding' ) ) {
 	/**
 	 * Site branding wrapper and display
