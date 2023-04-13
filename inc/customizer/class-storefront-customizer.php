@@ -617,6 +617,73 @@ if ( ! class_exists( 'Storefront_Customizer' ) ) :
 			);
 
 			/**
+			  * Footer Privacy Policy Page
+				*/
+				$wp_customize->add_control(
+					new WP_Customize_Control(
+						$wp_customize,
+						'wp_page_for_privacy_policy',
+						array(
+							'label'    => __( 'Privacy Policy Page', 'storefront' ),
+							'section'  => 'storefront_footer',
+							'settings' => 'wp_page_for_privacy_policy',
+							'priority' => 50,
+							'type'     => 'dropdown-pages',
+						)
+					)
+				);
+
+			/**
+			  * Footer Terms and Conditions Page
+				*/
+				$wp_customize->add_setting(
+					'wp_page_for_terms_conditions',
+					array(
+						'default'           => '',
+						'sanitize_callback' => 'absint',
+					)
+				);
+
+				$wp_customize->add_control(
+					new WP_Customize_Control(
+						$wp_customize,
+						'wp_page_for_terms_conditions',
+						array(
+							'label'    => __( 'Terms and Conditions Page', 'storefront' ),
+							'section'  => 'storefront_footer',
+							'settings' => 'wp_page_for_terms_conditions',
+							'priority' => 60,
+							'type'     => 'dropdown-pages',
+						)
+					)
+				);
+
+			/**
+			  * Footer Accessibility Page
+				*/
+				$wp_customize->add_setting(
+					'wp_page_for_accessibility',
+					array(
+						'default'           => '',
+						'sanitize_callback' => 'absint',
+					)
+				);
+
+				$wp_customize->add_control(
+					new WP_Customize_Control(
+						$wp_customize,
+						'wp_page_for_accessibility',
+						array(
+							'label'    => __( 'Accessibility Page', 'storefront' ),
+							'section'  => 'storefront_footer',
+							'settings' => 'wp_page_for_accessibility',
+							'priority' => 70,
+							'type'     => 'dropdown-pages',
+						)
+					)
+				);
+
+			/**
 			 * Buttons section
 			 */
 			$wp_customize->add_section(

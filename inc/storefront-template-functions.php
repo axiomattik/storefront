@@ -135,31 +135,20 @@ if ( ! function_exists( 'storefront_credit' ) ) {
 	 * @return void
 	 */
 	function storefront_credit() {
-		$links_output = '';
-
-		if ( apply_filters( 'storefront_credit_link', true ) ) {
-			if ( storefront_is_woocommerce_activated() ) {
-				$links_output .= '<a href="https://woocommerce.com" target="_blank" title="' . esc_attr__( 'WooCommerce - The Best eCommerce Platform for WordPress', 'storefront' ) . '" rel="noreferrer">' . esc_html__( 'Built with Storefront &amp; WooCommerce', 'storefront' ) . '</a>.';
-			} else {
-				$links_output .= '<a href="https://woocommerce.com/storefront/" target="_blank" title="' . esc_attr__( 'Storefront -  The perfect platform for your next WooCommerce project.', 'storefront' ) . '" rel="noreferrer">' . esc_html__( 'Built with Storefront', 'storefront' ) . '</a>.';
-			}
-		}
-
-		if ( apply_filters( 'storefront_privacy_policy_link', true ) && function_exists( 'the_privacy_policy_link' ) ) {
-			$separator    = '<span role="separator" aria-hidden="true"></span>';
-			$links_output = get_the_privacy_policy_link( '', ( ! empty( $links_output ) ? $separator : '' ) ) . $links_output;
-		}
-
-		$links_output = apply_filters( 'storefront_credit_links_output', $links_output );
 		?>
-		<div class="site-info">
-			<?php echo esc_html( apply_filters( 'storefront_copyright_text', $content = '&copy; ' . get_bloginfo( 'name' ) . ' ' . gmdate( 'Y' ) ) ); ?>
+		<div class="footer-bottom">
+			<div class="site-info">
+				<?php echo esc_html( '&copy; ' . gmdate( 'Y' ) . ' ' . get_bloginfo( 'name' ) ); ?>
+			</div><!-- .site-info -->
 
-			<?php if ( ! empty( $links_output ) ) { ?>
-				<br />
-				<?php echo wp_kses_post( $links_output ); ?>
-			<?php } ?>
-		</div><!-- .site-info -->
+			<div class="site-legal">
+				<ul>
+					<li><?php echo wp_kses_post( get_the_privacy_policy_link() ); ?></li>
+					<li><?php echo wp_kses_post( get_the_terms_conditions_link() ); ?></li>
+					<li><?php echo wp_kses_post( get_the_accessibility_link() ); ?></li>
+				</ul>
+			</div><!-- .site-legal -->
+		</div><!-- .footer-bottom -->
 		<?php
 	}
 }
@@ -716,3 +705,138 @@ if ( ! function_exists( 'storefront_header_container_close' ) ) {
 		echo '</div>';
 	}
 }
+
+
+/*
+ * Functions for retrieving 'Terms and Conditions' and 'Accessbility' links
+ */
+
+if ( ! function_exists( 'get_terms_conditions_url' ) ) {
+	/**
+	 * Get the URL of the terms and conditions page.
+	 *
+	 * This function retrieves the URL of the terms and conditions page, if one has been set
+	 * in the WordPress customizer. If no page has been set, or if the page is not published,
+	 * an empty string is returned.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return string The URL of the terms and conditions page, or an empty string if no page is set or published.
+	 */
+	function get_terms_conditions_url() {
+		$url            = '';
+		$policy_page_id = (int) get_theme_mod( 'wp_page_for_terms_conditions' );
+
+		error_log( 'wp_page_for_terms_conditions = ' . $policy_page_id );
+
+		if ( ! empty( $policy_page_id ) && get_post_status( $policy_page_id ) === 'publish' ) {
+			$url = (string) get_permalink( $policy_page_id );
+		}
+
+		return $url;
+	}
+}
+
+
+
+if ( ! function_exists( 'get_the_terms_conditions_link' ) ) {
+	/**
+	 * Get the terms and conditions link with optional HTML tags.
+	 *
+	 * This function returns a hyperlink to the terms and conditions page, with optional HTML
+	 * tags to format the link. The link text is the title of the terms and conditions page, and
+	 * the href attribute is the URL of the page. If no terms and conditions page has been set,
+	 * or if the page is not published, an empty string is returned.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $before Optional HTML code to display before the link.
+	 * @param string $after  Optional HTML code to display after the link.
+	 *
+	 * @return string The terms and conditions link, with optional HTML tags.
+	 */
+	function get_the_terms_conditions_link( $before = '', $after = '' ) {
+		$link                 = '';
+		$terms_conditions_url = get_terms_conditions_url();
+		$policy_page_id       = (int) get_theme_mod( 'wp_page_for_terms_conditions' );
+		$page_title           = ( $policy_page_id ) ? get_the_title( $policy_page_id ) : '';
+
+		if ( $terms_conditions_url && $page_title ) {
+			$link = sprintf(
+				'<a class="legal-link" href="%s" rel="terms-conditions">%s</a>',
+				esc_url( $terms_conditions_url ),
+				esc_html( $page_title )
+			);
+		}
+
+		if ( $link ) {
+			return $before . $link . $after;
+		}
+
+		return '';
+	}
+}
+
+
+if ( ! function_exists( 'get_accessibility_url' ) ) {
+	/**
+	 * Get the URL of the accessibility page.
+	 *
+	 * This function retrieves the URL of the accessibility page, which is set via the WordPress
+	 * customizer. If the page is published and has a valid URL, the URL is returned. Otherwise,
+	 * an empty string is returned.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return string The URL of the accessibility page, or an empty string if the page is not published.
+	 */
+	function get_accessibility_url() {
+		$url            = '';
+		$policy_page_id = (int) get_theme_mod( 'wp_page_for_accessibility' );
+
+		if ( ! empty( $policy_page_id ) && get_post_status( $policy_page_id ) === 'publish' ) {
+			$url = (string) get_permalink( $policy_page_id );
+		}
+		return $url;
+	}
+}
+
+
+
+if ( ! function_exists( 'get_the_accessibility_link' ) ) {
+	/**
+	 * Get the accessibility page link.
+	 *
+	 * This function retrieves the URL and title of the accessibility page, which is set via the WordPress
+	 * customizer, and returns an HTML link to the page. If the page is not published or does not have a valid URL
+	 * or title, an empty string is returned.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string $before Optional content to prepend to the link.
+	 * @param string $after  Optional content to append to the link.
+	 *
+	 * @return string The accessibility page link, or an empty string if the page is not published or has no URL or title.
+	 */
+	function get_the_accessibility_link( $before = '', $after = '' ) {
+		$link              = '';
+		$accessibility_url = get_accessibility_url();
+		$policy_page_id    = (int) get_theme_mod( 'wp_page_for_accessibility' );
+		$page_title        = ( $policy_page_id ) ? get_the_title( $policy_page_id ) : '';
+
+		if ( $accessibility_url && $page_title ) {
+			$link = sprintf(
+				'<a class="legal-link" href="%s" rel="terms-conditions">%s</a>',
+				esc_url( $accessibility_url ),
+				esc_html( $page_title )
+			);
+		}
+
+		if ( $link ) {
+			return $before . $link . $after;
+		}
+
+		return '';
+	}
+}
+
