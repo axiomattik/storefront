@@ -6,11 +6,14 @@
 
 $base-font:         "Source Sans Pro", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 $header-font:       $base-font;
+$subheader-font:		$base-font;
 $ms-base:           1em, 0.875em;
 $ms-ratio:          1.618;
 
 // base color scheme
 $body-background:   #fff;
+$color_header:			#b6967a;
+$color_subheader:		#604329;
 $color_body:        #43454b;
 $color_links:       #2c2d33;
 $color_border:      rgba(0, 0, 0, 0.05);
